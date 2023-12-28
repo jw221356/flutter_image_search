@@ -11,15 +11,29 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final repository = ImageItemRepository();
+  final searchTextEditingController = TextEditingController();
+  final repository = MockImageItemRepository();
 
-  var imageItems = [];
+  List<ImageItem> imageItems = [];
+  bool isLoading = false;
 
   Future searchImage(String query) async {
+    setState(() {
+      isLoading = true;
+    });
+
     imageItems = await repository.getImageItems(query);
 
     // 강제 UI 업데이트
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    searchTextEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,6 +45,7 @@ class _MainScreenState extends State<MainScreen> {
           child: Column(
             children: [
               TextField(
+                controller: searchTextEditingController,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -54,12 +69,14 @@ class _MainScreenState extends State<MainScreen> {
                       Icons.search,
                       color: Color(0xFF4FB6B2), // 외곽선 컬러 설정
                     ),
-                    onPressed: () => searchImage('사과'),
+                    onPressed: () => searchImage(searchTextEditingController.text),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              Expanded(
+              isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Expanded(
                 child: GridView.builder(
                   itemCount: imageItems.length,
                   itemBuilder: (context, index) {

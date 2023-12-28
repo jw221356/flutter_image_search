@@ -1,7 +1,7 @@
 
 import 'package:flutter_image_search/data/model/image_item.dart';
 
-class ImageItemRepository{
+class MockImageItemRepository{
   Future<List<ImageItem>> getImageItems(String query) async {
     return [
       ImageItem(
