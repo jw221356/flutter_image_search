@@ -15,12 +15,19 @@ class _MainScreenState extends State<MainScreen> {
 
   final repository = MockImageItemRepository();
 
-  var imageItems=[];
+  List<ImageItem> imageItems = [];
+  bool isLoading = false;
 
   Future<void> searchImage(String query) async {
+    setState(() {
+      isLoading = true;
+    });
+
     imageItems = await repository.getImageItems(query);
 
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -65,7 +72,9 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              Expanded(
+              isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Expanded(
                 child: GridView.builder(
                   itemCount: imageItems.length,
                   itemBuilder: (context, index) {
