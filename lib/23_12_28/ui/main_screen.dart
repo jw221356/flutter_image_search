@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_image_search/data/model/image_item.dart';
-import 'package:flutter_image_search/data/repository/image_item_repository.dart';
+import 'package:flutter_image_search/23_12_28/data/model/image_item.dart';
+import 'package:flutter_image_search/23_12_28/data/repository/image_item_repository.dart';
 import 'widget/image_item_widget.dart';
 
 class MainScreen extends StatefulWidget {
